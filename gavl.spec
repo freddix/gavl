@@ -1,7 +1,7 @@
 Summary:	GMerlin Audio Video Library
 Name:		gavl
 Version:	1.4.0
-Release:	1
+Release:	2
 License:	GPL
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/gmerlin/%{name}-%{version}.tar.gz
@@ -27,7 +27,8 @@ This is the package containing the header files for gavl library.
 %prep
 %setup -q
 
-sed -i -e 's|-O3 -funroll-all-loops -fomit-frame-pointer -ffast-math|%{rpmcflags}|' configure.ac
+%{__sed} -i -e 's|-O3 -funroll-all-loops -fomit-frame-pointer -ffast-math|%{rpmcflags}|' \
+    configure.ac
 
 %build
 %{__libtoolize}
@@ -47,7 +48,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-rm -rf $RPM_BUILD_ROOT%{_prefix}/share/doc/%{name}
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -64,7 +65,6 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libgavl.so
-%{_libdir}/libgavl.la
 %{_includedir}/gavl
 %{_pkgconfigdir}/gavl.pc
 
